@@ -120,7 +120,7 @@ namespace GameProject
                     elapsedCooldownMilliseconds = 0;
                 }
             }
-            
+
             // shoot if appropriate
             if (health > 0 && mouse.LeftButton == ButtonState.Pressed && canShoot)
             {
@@ -133,6 +133,85 @@ namespace GameProject
                     drawRectangle.Center.Y - GameConstants.FrenchFriesProjectileOffset,
                     GameConstants.FrenchFriesProjectileSpeed);
                 Game1.AddProjectile(projectile);
+            }
+        }
+
+        /// <summary>
+        /// Updates the burger's location based on keyboard. Also
+        /// fires french fries as appropriate
+        /// </summary>
+        /// <param name="gameTime">game time</param>
+        /// <param name="keyboard">the current state of the keyboard</param>
+        public void Update(GameTime gameTime, KeyboardState keyboard)
+        {
+            // burger should only respond to input if it still has health
+            if (health > 0)
+            {
+                if (keyboard.IsKeyDown(Keys.Up) || keyboard.IsKeyDown(Keys.W))
+                {
+                    drawRectangle.Y -= GameConstants.BurgerMovementAmount;
+                }
+                if (keyboard.IsKeyDown(Keys.Left) || keyboard.IsKeyDown(Keys.A))
+                {
+                    drawRectangle.X -= GameConstants.BurgerMovementAmount;
+                }
+                if (keyboard.IsKeyDown(Keys.Down) || keyboard.IsKeyDown(Keys.S))
+                {
+                    drawRectangle.Y += GameConstants.BurgerMovementAmount;
+                }
+                if (keyboard.IsKeyDown(Keys.Right) || keyboard.IsKeyDown(Keys.D))
+                {
+                    drawRectangle.X += GameConstants.BurgerMovementAmount;
+                }
+            }
+
+            // clamp burger in window
+            if (drawRectangle.Left < 0)
+            {
+                drawRectangle.X = 0;
+            }
+            if (drawRectangle.Right > GameConstants.WindowWidth)
+            {
+                drawRectangle.X = GameConstants.WindowWidth - drawRectangle.Width;
+            }
+            if (drawRectangle.Top < 0)
+            {
+                drawRectangle.Y = 0;
+            }
+            if (drawRectangle.Bottom > GameConstants.WindowHeight)
+            {
+                drawRectangle.Y = GameConstants.WindowHeight - drawRectangle.Height;
+            }
+
+            // update shooting allowed
+            // timer concept (for animations) introduced in Chapter 7
+            if (!canShoot)
+            {
+                elapsedCooldownMilliseconds += gameTime.ElapsedGameTime.Milliseconds;
+
+                if (elapsedCooldownMilliseconds > GameConstants.BurgerTotalCooldownMilliseconds
+                    || keyboard.IsKeyUp(Keys.Space))
+                {
+                    canShoot = true;
+                    elapsedCooldownMilliseconds = 0;
+                }
+            }
+
+            // shoot if appropriate
+            if (health > 0 && keyboard.IsKeyDown(Keys.Space) && canShoot)
+            {
+                canShoot = false;
+
+                Projectile projectile = new Projectile(
+                    ProjectileType.FrenchFries,
+                    Game1.GetProjectileSprite(ProjectileType.FrenchFries),
+                    drawRectangle.Center.X,
+                    drawRectangle.Center.Y - GameConstants.FrenchFriesProjectileOffset,
+                    GameConstants.FrenchFriesProjectileSpeed);
+                Game1.AddProjectile(projectile);
+
+                // play shooting sound
+                shootSound.Play();
             }
         }
 

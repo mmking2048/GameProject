@@ -5,6 +5,7 @@ using System.Text;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Audio;
 
 namespace GameProject
 {
@@ -49,6 +50,25 @@ namespace GameProject
 
             Initialize(spriteStrip);
             Play(x, y);
+        }
+
+        /// <summary>
+        /// Constructs a new explosion object
+        /// </summary>
+        /// <param name="spriteStrip">the sprite strip for the explosion</param>
+        /// <param name="x">the x location of the center of the explosion</param>
+        /// <param name="y">the y location of the center of the explosion</param>
+        /// <param name="explodeSound">the sound played when there is an explosion</param>
+        public Explosion(Texture2D spriteStrip, int x, int y, SoundEffect explodeSound)
+        {
+            // initialize animation to start at frame 0
+            currentFrame = 0;
+
+            Initialize(spriteStrip);
+            Play(x, y);
+
+            // play explode sound
+            explodeSound.Play();
         }
 
         #endregion

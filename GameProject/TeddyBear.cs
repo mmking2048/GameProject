@@ -156,6 +156,9 @@ namespace GameProject
                     drawRectangle.Center.Y + GameConstants.TeddyBearProjectileOffset,
                     GetProjectileYVelocity());
                 Game1.AddProjectile(projectile);
+
+                // play shooting sound
+                shootSound.Play();
             }
         }
 
@@ -199,12 +202,18 @@ namespace GameProject
                 // bounce off top
                 drawRectangle.Y = 0;
                 velocity.Y *= -1;
+
+                // play bounce sound
+                bounceSound.Play();
             }
             else if ((drawRectangle.Y + drawRectangle.Height) > GameConstants.WindowHeight)
             {
                 // bounce off bottom
                 drawRectangle.Y = GameConstants.WindowHeight - drawRectangle.Height;
                 velocity.Y *= -1;
+
+                // play bounce sound
+                bounceSound.Play();
             }
         }
         /// <summary>
@@ -214,15 +223,21 @@ namespace GameProject
         {
             if (drawRectangle.X < 0)
             {
-                // bounc off left
+                // bounce off left
                 drawRectangle.X = 0;
                 velocity.X *= -1;
+
+                // play bounce sound
+                bounceSound.Play();
             }
             else if ((drawRectangle.X + drawRectangle.Width) > GameConstants.WindowWidth)
             {
                 // bounce off right
                 drawRectangle.X = GameConstants.WindowWidth - drawRectangle.Width;
                 velocity.X *= -1;
+
+                // play bounce sound
+                bounceSound.Play();
             }
         }
 
